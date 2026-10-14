@@ -1,0 +1,168 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core">
+   <Dialog
+      id="createInvoiceDialog"
+      title="{i18n>createDialogTitle}"
+      contentWidth="42rem"
+      stretchOnPhone="true"
+      draggable="true"
+      resizable="true">
+      <content>
+         <Wizard
+            id="createInvoiceWizard"
+            complete=".onSaveInvoice">
+            <WizardStep
+               id="invoiceProductStep"
+               title="{i18n>invoiceWizardProductStep}"
+               validated="{newInvoice>/productStepValid}">
+               <VBox class="sapUiSmallMargin">
+                  <Label
+                     text="{i18n>fieldProductName}"
+                     labelFor="existingProductSelect"
+                     visible="{= !${newInvoice>/creatingProduct} }"/>
+                  <Select
+                     id="existingProductSelect"
+                     selectedKey="{newInvoice>/selectedProduct}"
+                     items="{newInvoice>/products}"
+                     visible="{= !${newInvoice>/creatingProduct} }"
+                     change=".onInvoiceProductSelect"
+                     valueState="{newInvoice>/ProductNameState}"
+                     valueStateText="{newInvoice>/ProductNameStateText}"
+                     width="100%">
+                     <items>
+                        <core:Item key="{newInvoice>ID}" text="{newInvoice>Name}"/>
+                     </items>
+                  </Select>
+                  <Label
+                     text="{i18n>fieldProductName}"
+                     labelFor="inputProductName"
+                     visible="{newInvoice>/creatingProduct}"/>
+                  <Input
+                     id="inputProductName"
+                     value="{newInvoice>/ProductName}"
+                     placeholder="{i18n>placeholderProductName}"
+                     visible="{newInvoice>/creatingProduct}"
+                     valueState="{newInvoice>/ProductNameState}"
+                     valueStateText="{newInvoice>/ProductNameStateText}"
+                     liveChange=".onInvoiceWizardInputChange"/>
+                  <Button
+                     text="{i18n>buttonCreateProduct}"
+                     icon="sap-icon://add"
+                     visible="{= !${newInvoice>/creatingProduct} }"
+                     press=".onStartCreateInvoiceProduct"/>
+                  <Button
+                     text="{i18n>buttonChooseProduct}"
+                     visible="{newInvoice>/creatingProduct}"
+                     press=".onCancelCreateInvoiceProduct"/>
+
+                  <Label text="{i18n>fieldQuantity}" required="true" labelFor="inputQuantity"
+                     class="sapUiSmallMarginTop"/>
+                  <Input
+                     id="inputQuantity"
+                     value="{newInvoice>/Quantity}"
+                     type="Number"
+                     placeholder="0"
+                     valueState="{newInvoice>/QuantityState}"
+                     valueStateText="{newInvoice>/QuantityStateText}"
+                     liveChange=".onInvoiceWizardInputChange"/>
+                  <Label text="{i18n>fieldUnitPrice}" required="true" labelFor="inputUnitPrice"
+                     class="sapUiSmallMarginTop"/>
+                  <Input
+                     id="inputUnitPrice"
+                     value="{newInvoice>/UnitPrice}"
+                     type="Number"
+                     placeholder="0.00"
+                     valueState="{newInvoice>/UnitPriceState}"
+                     valueStateText="{newInvoice>/UnitPriceStateText}"
+                     liveChange=".onInvoiceWizardInputChange"/>
+                  <MessageStrip
+                     text="{newInvoice>/productValidationMessage}"
+                     type="Error"
+                     showIcon="true"
+                     visible="{= !!${newInvoice>/productValidationMessage} }"
+                     class="sapUiSmallMarginTop"/>
+               </VBox>
+            </WizardStep>
+            <WizardStep
+               id="invoiceSupplierStep"
+               title="{i18n>invoiceWizardSupplierStep}"
+               validated="{newInvoice>/supplierStepValid}">
+               <VBox class="sapUiSmallMargin">
+                  <Label
+                     text="{i18n>fieldSupplier}"
+                     labelFor="existingSupplierSelect"
+                     visible="{= !${newInvoice>/creatingSupplier} }"/>
+                  <Select
+                     id="existingSupplierSelect"
+                     selectedKey="{newInvoice>/selectedSupplier}"
+                     items="{newInvoice>/suppliers}"
+                     visible="{= !${newInvoice>/creatingSupplier} }"
+                     change=".onInvoiceSupplierSelect"
+                     valueState="{newInvoice>/ShipperNameState}"
+                     valueStateText="{newInvoice>/ShipperNameStateText}"
+                     width="100%">
+                     <items>
+                        <core:Item key="{newInvoice>ID}" text="{newInvoice>Name}"/>
+                     </items>
+                  </Select>
+                  <Label
+                     text="{i18n>fieldSupplier}"
+                     labelFor="inputSupplier"
+                     visible="{newInvoice>/creatingSupplier}"/>
+                  <Input
+                     id="inputSupplier"
+                     value="{newInvoice>/ShipperName}"
+                     placeholder="{i18n>placeholderSupplier}"
+                     visible="{newInvoice>/creatingSupplier}"
+                     valueState="{newInvoice>/ShipperNameState}"
+                     valueStateText="{newInvoice>/ShipperNameStateText}"
+                     liveChange=".onInvoiceWizardInputChange"/>
+                  <Button
+                     text="{i18n>buttonCreateSupplier}"
+                     icon="sap-icon://add"
+                     visible="{= !${newInvoice>/creatingSupplier} }"
+                     press=".onStartCreateInvoiceSupplier"/>
+                  <Button
+                     text="{i18n>buttonChooseSupplier}"
+                     visible="{newInvoice>/creatingSupplier}"
+                     press=".onCancelCreateInvoiceSupplier"/>
+                  <Label text="{i18n>fieldStatus}" labelFor="selectStatus" class="sapUiSmallMarginTop"/>
+                  <Select
+                     id="selectStatus"
+                     selectedKey="{newInvoice>/Status}"
+                     change=".onInvoiceStatusChange">
+                     <items>
+                        <core:Item key="A" text="{i18n>statusNew}"/>
+                        <core:Item key="B" text="{i18n>statusInProgress}"/>
+                        <core:Item key="C" text="{i18n>statusDone}"/>
+                     </items>
+                  </Select>
+                  <MessageStrip
+                     text="{newInvoice>/supplierValidationMessage}"
+                     type="Error"
+                     showIcon="true"
+                     visible="{= !!${newInvoice>/supplierValidationMessage} }"
+                     class="sapUiSmallMarginTop"/>
+               </VBox>
+            </WizardStep>
+            <WizardStep
+               id="invoiceReviewStep"
+               title="{i18n>invoiceWizardReviewStep}">
+               <VBox class="sapUiSmallMargin">
+                  <Title text="{i18n>invoiceWizardReviewTitle}" level="H3"/>
+                  <ObjectAttribute title="{i18n>fieldProductName}" text="{newInvoice>/ProductName}"/>
+                  <ObjectAttribute title="{i18n>fieldQuantity}" text="{newInvoice>/Quantity}"/>
+                  <ObjectAttribute title="{i18n>fieldUnitPrice}" text="{newInvoice>/UnitPrice}"/>
+                  <ObjectAttribute title="{i18n>fieldSupplier}" text="{newInvoice>/ShipperName}"/>
+                  <ObjectAttribute title="{i18n>fieldStatus}" text="{newInvoice>/statusText}"/>
+                  <ObjectAttribute title="{i18n>fieldInvoiceTotal}" text="{newInvoice>/total}"/>
+               </VBox>
+            </WizardStep>
+         </Wizard>
+      </content>
+      <endButton>
+         <Button text="{i18n>buttonCancel}" press=".onCancelDialog"/>
+      </endButton>
+   </Dialog>
+</core:FragmentDefinition>

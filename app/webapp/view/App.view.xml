@@ -1,0 +1,11 @@
+<mvc:View
+   controllerName="sap.ui.webapp.wt.controller.App"
+   xmlns:mvc="sap.ui.core.mvc"
+   xmlns:f="sap.f"
+   displayBlock="true"
+   height="100%">
+   <f:FlexibleColumnLayout
+      id="fcl"
+      class="myApp"
+      layout="{layout>/layout}"/>
+</mvc:View>

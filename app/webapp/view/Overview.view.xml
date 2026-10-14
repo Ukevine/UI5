@@ -1,0 +1,4 @@
+<mvc:View
+   xmlns:mvc="sap.ui.core.mvc">
+   <mvc:XMLView viewName="sap.ui.webapp.wt.view.InvoiceList"/>
+</mvc:View>

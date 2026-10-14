@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta charset="utf-8">
+      <title>Mock Server Test</title>
+
+      <script
+         id="sap-ui-bootstrap"
+         src="https://ui5.sap.com/resources/sap-ui-core.js"
+         data-sap-ui-theme="sap_horizon"
+         data-sap-ui-libs="sap.m,sap.f,sap.uxap"
+         data-sap-ui-compatVersion="edge"
+         data-sap-ui-resourceroots='{
+            "sap.ui.webapp.wt": "../"
+         }'>
+      </script>
+
+      <script>
+         sap.ui.getCore().attachInit(function () {
+            sap.ui.require([
+               "sap/ui/webapp/wt/localService/mockserver",
+               "sap/ui/model/odata/v2/ODataModel",
+               "sap/ui/core/ComponentContainer"
+            ], function (mockserver, ODataModel, ComponentContainer) {
+               mockserver.init();
+
+               sap.ui.require([
+                  "sap/ui/webapp/wt/Component"
+               ], function (Component) {
+                  var oComponent = new Component();
+                  oComponent.setModel(new ODataModel(
+                     "/destinations/northwind/V2/Northwind/Northwind.svc/"
+                  ), "invoice");
+                  var oContainer = new ComponentContainer({ height: "100%" });
+                  oContainer.setComponent(oComponent);
+                  oContainer.placeAt("content");
+               });
+            });
+         });
+      </script>
+   </head>
+   <body class="sapUiBody" id="content">
+   </body>
+</html>

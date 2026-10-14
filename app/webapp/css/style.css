@@ -1,0 +1,61 @@
+.myApp .myCustomButton.sapMBtn {
+  margin-right: 0.125rem
+}
+
+html[dir="rtl"] .myApp .myCustomButton.sapMBtn {
+  margin-left: 0.125rem;
+  margin-right: 0 
+}
+
+.myApp.sapFFCL {
+	height: 100%;
+}
+
+.myAppDemoWTProductRating {
+	padding: 0.75rem;
+}
+.myAppDemoWTProductRating .sapMRI {
+	vertical-align: initial;
+}
+
+.invoiceFilterPanel.sapMPanel {
+	border: 0;
+}
+
+.invoiceFilterPanel .sapMPanelContent {
+	border-bottom: 0;
+}
+
+.invoiceFilterToolbar.sapMTB {
+	border-bottom: 0;
+}
+
+.invoiceObjectHero {
+	width: 100%;
+}
+
+.invoiceObjectHeroDetails {
+	min-width: 12rem;
+}
+
+.invoiceProductAvatar {
+	border: 1px solid var(--sapGroup_ContentBorderColor);
+	border-radius: 0.75rem;
+	overflow: hidden;
+}
+
+.invoiceObjectDetails {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+	gap: 1rem;
+	box-sizing: border-box;
+	width: 100%;
+}
+
+.invoiceDetailCard {
+	box-sizing: border-box;
+	padding: 1rem;
+	border: 1px solid var(--sapGroup_ContentBorderColor);
+	border-radius: 0.75rem;
+	background: var(--sapGroup_ContentBackground);
+}

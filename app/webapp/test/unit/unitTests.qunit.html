@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta charset="utf-8">
+   <title>Unit tests for Walkthrough</title>
+   
+   <script
+      id="sap-ui-bootstrap"
+      src="https://ui5.sap.com/resources/sap-ui-core.js"
+      data-sap-ui-theme="sap_horizon"
+      data-sap-ui-libs="sap.m"
+      data-sap-ui-compatVersion="edge"
+      data-sap-ui-resourceroots='{
+         "sap.ui.webapp.wt": "../../",
+         "test.unit": "./"
+      }'>
+   </script>
+   
+   <script>
+      sap.ui.require([
+         "sap/ui/qunit/qunit-css",
+         "sap/ui/thirdparty/qunit",
+         "sap/ui/qunit/qunit-junit",
+         "test/unit/model/formatter"
+      ]);
+   </script>
+</head>
+<body>
+   <div id="qunit"></div>
+   <div id="qunit-fixture"></div>
+</body>
+</html>

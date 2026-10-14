@@ -1,0 +1,7 @@
+
+ProductName,Quantity,ExtendedPrice,ShipperName,ShippedDate,Status
+Pineapple,21,87.2000,Fun Inc.,2015-04-01T00:00:00,A
+Milk,4,9.99999,ACME,2015-02-18T00:00:00,B
+Canned Beans,3,6.85000,ACME,2015-03-02T00:00:00,B
+Salad,2,8.8000,ACME,2015-04-12T00:00:00,C
+Bread,1,2.71212,Fun Inc.,2015-01-27T00:00:00,A

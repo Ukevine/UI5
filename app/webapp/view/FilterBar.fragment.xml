@@ -1,0 +1,45 @@
+<core:FragmentDefinition
+   xmlns="sap.m"
+   xmlns:core="sap.ui.core">
+   <Panel class="sapUiResponsiveMargin sapUiSmallMarginTop invoiceFilterPanel">
+      <content>
+         <Toolbar design="Transparent" class="invoiceFilterToolbar">
+            <VBox class="sapUiSmallMarginEnd">
+               <Label text="{i18n>filterSupplier}" labelFor="supplierFilter"/>
+               <Select
+                  id="supplierFilter"
+                  selectedKey="{filter>/supplier}"
+                  width="12rem"
+                  items="{suppliers>/items}">
+                  <items>
+                     <core:Item key="{suppliers>key}" text="{suppliers>text}"/>
+                  </items>
+               </Select>
+            </VBox>
+
+            <VBox class="sapUiSmallMarginEnd">
+               <Label text="{i18n>filterStatus}" labelFor="statusFilter"/>
+               <Select
+                  id="statusFilter"
+                  selectedKey="{filter>/status}"
+                  width="10rem">
+                  <items>
+                     <core:Item key="" text="{i18n>filterAllStatuses}"/>
+                     <core:Item key="A" text="{i18n>invoiceStatusA}"/>
+                     <core:Item key="B" text="{i18n>invoiceStatusB}"/>
+                     <core:Item key="C" text="{i18n>invoiceStatusC}"/>
+                  </items>
+               </Select>
+            </VBox>
+
+            <VBox class="sapUiSmallMarginEnd">
+               <Label text=" "/>
+               <HBox alignItems="Center">
+                  <Button text="{i18n>filterGo}" press=".onApplyFilter" type="Emphasized"/>
+                  <Button text="{i18n>filterClear}" press=".onClearFilter" class="sapUiTinyMarginBegin"/>
+               </HBox>
+            </VBox>
+         </Toolbar>
+      </content>
+   </Panel>
+</core:FragmentDefinition>

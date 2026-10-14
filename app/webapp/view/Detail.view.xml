@@ -1,0 +1,290 @@
+<mvc:View
+   controllerName="sap.ui.webapp.wt.controller.Detail"
+   xmlns:mvc="sap.ui.core.mvc"
+   xmlns:m="sap.m"
+   xmlns:uxap="sap.uxap"
+   xmlns:unified="sap.ui.unified"
+   xmlns:wt="sap.ui.webapp.wt.control">
+   <uxap:ObjectPageLayout
+      id="invoiceObjectPage"
+      showTitleInHeaderContent="true"
+      upperCaseAnchorBar="false"
+      useIconTabBar="true"
+      showAnchorBar="true">
+      <uxap:headerTitle>
+         <uxap:ObjectPageDynamicHeaderTitle>
+            <uxap:expandedHeading>
+               <m:VBox>
+                  <m:Breadcrumbs currentLocationText="{invoice>ProductName}">
+                     <m:Link
+                        text="{i18n>invoiceListTitle}"
+                        press=".onNavigateToInvoices"/>
+                  </m:Breadcrumbs>
+                  <m:Title text="{invoice>ProductName}" level="H1"/>
+               </m:VBox>
+            </uxap:expandedHeading>
+            <uxap:snappedHeading>
+               <m:VBox>
+                  <m:Breadcrumbs currentLocationText="{invoice>ProductName}">
+                     <m:Link
+                        text="{i18n>invoiceListTitle}"
+                        press=".onNavigateToInvoices"/>
+                  </m:Breadcrumbs>
+                  <m:Title text="{invoice>ProductName}" level="H2"/>
+               </m:VBox>
+            </uxap:snappedHeading>
+            <uxap:actions>
+               <m:Button
+                  text="{i18n>editSelected}"
+                  icon="sap-icon://edit"
+                  type="Emphasized"
+                  visible="{= !${view>/editing} }"
+                  enabled="{= !${view>/imageLoading} &amp;&amp; !${view>/invoiceActionBusy} }"
+                  press=".onEdit"/>
+               <m:Button
+                  text="{i18n>deleteInvoice}"
+                  icon="sap-icon://delete"
+                  type="Negative"
+                  visible="{= !${view>/editing} }"
+                  enabled="{= !${view>/imageLoading} &amp;&amp; !${view>/imageSaving} &amp;&amp; !${view>/invoiceActionBusy} }"
+                  press=".onDeleteInvoice"/>
+               <m:Button
+                  text="{i18n>copyInvoice}"
+                  icon="sap-icon://copy"
+                  visible="{= !${view>/editing} }"
+                  enabled="{= !${view>/imageLoading} &amp;&amp; !${view>/imageSaving} &amp;&amp; !${view>/invoiceActionBusy} }"
+                  press=".onCopyInvoice"/>
+               <m:Button
+                  text="{i18n>shareInvoice}"
+                  icon="sap-icon://share-2"
+                  visible="{= !${view>/editing} }"
+                  enabled="{= !${view>/invoiceActionBusy} }"
+                  press=".onShareInvoice"/>
+               <m:Button
+                  text="{i18n>buttonSave}"
+                  type="Emphasized"
+                  visible="{view>/editing}"
+                  enabled="{= !${view>/imageLoading} &amp;&amp; !${view>/imageReading} &amp;&amp; !${view>/imageSaving} }"
+                  press=".onSave"/>
+               <m:Button
+                  text="{i18n>cancelEdit}"
+                  visible="{view>/editing}"
+                  press=".onCancelEdit"/>
+               <m:Button
+                  id="btnDetailMessages"
+                  icon="sap-icon://message-popup"
+                  type="{= ${view>/errorCount} > 0 ? 'Negative' : 'Default' }"
+                  text="{= ${view>/messageCount} > 0 ? '' + ${view>/messageCount} : '' }"
+                  tooltip="{i18n>messagesButtonTooltip}"
+                  visible="{= ${view>/messageCount} > 0 }"
+                  press=".onMessagePopoverPress"/>
+            </uxap:actions>
+         </uxap:ObjectPageDynamicHeaderTitle>
+      </uxap:headerTitle>
+      <uxap:headerContent>
+         <m:HBox
+            wrap="Wrap"
+            alignItems="Center"
+            class="invoiceObjectHero sapUiSmallMarginBottom">
+            <m:Avatar
+               displayShape="Square"
+               displaySize="Custom"
+               customDisplaySize="8rem"
+               customFontSize="2rem"
+               tooltip="{i18n>productImageAlt}"
+               initials="{
+                  path: 'invoice>ProductName',
+                  formatter: '.formatter.initials'
+               }"
+               src="{= ${invoice>ProductImage} ? 'data:' + ${invoice>ProductImageType} + ';base64,' + ${invoice>ProductImage} : '' }"
+               imageFitType="Cover"
+               class="invoiceProductAvatar sapUiSmallMarginEnd"/>
+            <m:VBox class="invoiceObjectHeroDetails">
+               <m:ObjectStatus
+                  title="{i18n>columnStatus}"
+                  text="{
+                     path: 'invoice>Status',
+                     formatter: '.formatter.statusText'
+                  }"
+                  class="sapUiSmallMarginBottom"/>
+               <m:ObjectAttribute
+                  title="{i18n>columnQuantity}"
+                  text="{invoice>Quantity}"
+                  class="sapUiTinyMarginBottom"/>
+               <m:ObjectAttribute
+                  title="{i18n>columnSupplier}"
+                  text="{invoice>ShipperName}"/>
+               <m:HBox wrap="Wrap" class="invoiceObjectHeroActions sapUiTinyMarginTop">
+                  <unified:FileUploader
+                     id="productImageUploader"
+                     buttonOnly="true"
+                     buttonText="{= ${invoice>ProductImage} ? ${i18n>replaceProductImage} : ${i18n>uploadProductImage} }"
+                     icon="sap-icon://camera"
+                     enabled="{= !${view>/imageLoading} &amp;&amp; !${view>/imageReading} &amp;&amp; !${view>/imageSaving} }"
+                     fileType="jpg,jpeg,png,webp"
+                     maximumFileSize="5"
+                     change=".onImageSelected"/>
+                  <m:Button
+                     text="{i18n>removeProductImage}"
+                     icon="sap-icon://delete"
+                     type="Transparent"
+                     visible="{= !!${invoice>ProductImage} }"
+                     enabled="{= !${view>/imageLoading} &amp;&amp; !${view>/imageSaving} }"
+                     press=".onRemoveImage"
+                     class="sapUiTinyMarginBegin"/>
+               </m:HBox>
+            </m:VBox>
+         </m:HBox>
+      </uxap:headerContent>
+      <uxap:sections>
+         <uxap:ObjectPageSection title="{i18n>invoiceDetailsTitle}">
+            <uxap:subSections>
+               <uxap:ObjectPageSubSection>
+                  <uxap:blocks>
+                     <m:VBox class="invoiceObjectDetails sapUiResponsiveContentPadding">
+                        <m:VBox class="invoiceDetailCard">
+                           <m:Label text="{i18n>columnName}" labelFor="productName"/>
+                           <m:Text
+                              id="productNameText"
+                              text="{invoice>ProductName}"
+                              visible="{= !${view>/editing} }"/>
+                           <m:Input
+                              id="productName"
+                              value="{invoice>ProductName}"
+                              visible="{view>/editing}"
+                              maxLength="40"/>
+                        </m:VBox>
+                        <m:VBox class="invoiceDetailCard">
+                           <m:Label text="{i18n>columnQuantity}" labelFor="quantity"/>
+                           <m:Text
+                              text="{invoice>Quantity}"
+                              visible="{= !${view>/editing} }"/>
+                           <m:Input
+                              id="quantity"
+                              value="{invoice>Quantity}"
+                              type="Number"
+                              visible="{view>/editing}"/>
+                           <m:Label text="{i18n>columnPrice}" labelFor="price"/>
+                           <m:Text
+                              text="{invoice>ExtendedPrice}"
+                              visible="{= !${view>/editing} }"/>
+                           <m:Input
+                              id="price"
+                              value="{invoice>ExtendedPrice}"
+                              type="Number"
+                              visible="{view>/editing}"/>
+                           <m:Label text="{i18n>dateTitle}" labelFor="shippedDate"/>
+                           <m:Text
+                              text="{invoice>ShippedDate}"
+                              visible="{= !${view>/editing} }"/>
+                           <m:DateTimePicker
+                              id="shippedDate"
+                              value="{invoice>ShippedDate}"
+                              valueFormat="yyyy-MM-dd'T'HH:mm:ss'Z'"
+                              displayFormat="medium"
+                              visible="{view>/editing}"/>
+                        </m:VBox>
+                     </m:VBox>
+                  </uxap:blocks>
+               </uxap:ObjectPageSubSection>
+            </uxap:subSections>
+         </uxap:ObjectPageSection>
+         <uxap:ObjectPageSection title="{i18n>suppliersSectionTitle}">
+            <uxap:subSections>
+               <uxap:ObjectPageSubSection>
+                  <uxap:blocks>
+                     <m:VBox class="invoiceObjectDetails sapUiResponsiveContentPadding">
+                        <m:VBox class="invoiceDetailCard">
+                           <m:Label text="{i18n>columnSupplier}" labelFor="shipperName"/>
+                           <m:Text
+                              text="{invoice>ShipperName}"
+                              visible="{= !${view>/editing} }"/>
+                           <m:Input
+                              id="shipperName"
+                              value="{invoice>ShipperName}"
+                              visible="{view>/editing}"
+                              maxLength="40"/>
+                        </m:VBox>
+                     </m:VBox>
+                  </uxap:blocks>
+               </uxap:ObjectPageSubSection>
+            </uxap:subSections>
+         </uxap:ObjectPageSection>
+         <uxap:ObjectPageSection title="{i18n>pdfViewerSectionTitle}">
+            <uxap:subSections>
+               <uxap:ObjectPageSubSection>
+                  <uxap:blocks>
+                     <m:VBox class="sapUiResponsiveMargin" width="auto">
+                        <m:OverflowToolbar class="sapUiTinyMarginBottom">
+                           <unified:FileUploader
+                              id="pdfDocumentUploader"
+                              buttonOnly="true"
+                              buttonText="{= ${view>/pdfSource} ? ${i18n>replacePdfDocument} : ${i18n>uploadPdfDocument} }"
+                              icon="sap-icon://upload"
+                              mimeType="application/pdf"
+                              fileType="pdf"
+                              maximumFileSize="10"
+                              enabled="{= !${view>/pdfLoading} &amp;&amp; !${view>/pdfSaving} }"
+                              change=".onPdfSelected"/>
+                           <m:Button
+                              text="{i18n>downloadPdfDocument}"
+                              icon="sap-icon://download"
+                              visible="{= !!${view>/pdfSource} }"
+                              enabled="{= !${view>/pdfLoading} &amp;&amp; !${view>/pdfSaving} }"
+                              press=".onDownloadPdf"/>
+                           <m:Button
+                              text="{i18n>removePdfDocument}"
+                              icon="sap-icon://delete"
+                              type="Negative"
+                              visible="{= !!${view>/pdfSource} }"
+                              enabled="{= !${view>/pdfLoading} &amp;&amp; !${view>/pdfSaving} }"
+                              press=".onRemovePdf"/>
+                           <m:ToolbarSpacer/>
+                           <m:Button
+                              text="{i18n>loadSamplePdfDocument}"
+                              icon="sap-icon://document-text"
+                              enabled="{= !${view>/pdfLoading} &amp;&amp; !${view>/pdfSaving} }"
+                              press=".onLoadSamplePdf"/>
+                        </m:OverflowToolbar>
+
+                        <m:PDFViewer
+                           id="pdfViewer"
+                           source="{view>/pdfSource}"
+                           title="{invoice>ProductName} - {i18n>invoiceDocumentTitle}"
+                           height="500px"
+                           width="100%"
+                           showDownloadButton="true"
+                           busy="{view>/pdfLoading}"
+                           busyIndicatorDelay="300"
+                           loaded=".onPdfLoaded"
+                           error=".onPdfError"
+                           sourceValidationFailed=".onPdfSourceValidationFailed">
+                           <m:errorPlaceholder>
+                              <m:VBox alignItems="Center" justifyContent="Center" class="sapUiLargeMargin">
+                                 <m:Text text="{i18n>pdfDocumentNoDocument}" class="sapUiSmallMarginBottom"/>
+                                 <m:MessageStrip
+                                    text="{i18n>pdfDocumentAttachPrompt}"
+                                    type="Information"
+                                    showIcon="true"/>
+                              </m:VBox>
+                           </m:errorPlaceholder>
+                        </m:PDFViewer>
+                     </m:VBox>
+                  </uxap:blocks>
+               </uxap:ObjectPageSubSection>
+            </uxap:subSections>
+         </uxap:ObjectPageSection>
+         <uxap:ObjectPageSection title="{i18n>productRatingSectionTitle}">
+            <uxap:subSections>
+               <uxap:ObjectPageSubSection>
+                  <uxap:blocks>
+                     <wt:ProductRating
+                        id="productRating"
+                        change=".onRatingChange"/>
+                  </uxap:blocks>
+               </uxap:ObjectPageSubSection>
+            </uxap:subSections>
+         </uxap:ObjectPageSection>
+      </uxap:sections>
+   </uxap:ObjectPageLayout>
+</mvc:View>
